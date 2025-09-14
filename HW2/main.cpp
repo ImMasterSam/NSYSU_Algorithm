@@ -1,6 +1,6 @@
 #include <iostream>
 #include "test.h"
-#include "exhaustive.h"
+#include "greedy.h"
 using namespace std;
 
 const string point_dir = "data/";
@@ -22,7 +22,7 @@ int main(){
 
         cout << "Number of cities: " << city_ids.size() << endl;
 
-        Exhaustive solver(test);
+        Greedy solver(test);
         solver.solve();
         sol_t best_sol = solver.getBestSol();
         double best_dis = solver.getBestDis();

@@ -39,7 +39,7 @@ private:
 
     // processing
     void init();
-    double calcDis(sol_t sol);
+    inline double calcDis(sol_t sol);
 
 };
 
@@ -92,7 +92,7 @@ void Exhaustive::init(){
 
 }
 
-double Exhaustive::calcDis(sol_t sol){
+inline double Exhaustive::calcDis(sol_t sol){
 
     double dis = 0.0;
 
