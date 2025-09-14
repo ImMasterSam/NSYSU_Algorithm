@@ -3,10 +3,13 @@
 #include "exhaustive.h"
 using namespace std;
 
+const string point_dir = "data/";
+const string ans_dir = "ans/";
+
 Test tests[] = {
-    Test("Test Case 1", "dt1/point.txt", "ans/ans_dt1.txt", "dt1/ans.txt"),
-    Test("Test Case 2", "dt2/point.txt", "ans/ans_dt2.txt", "dt2/ans.txt"),
-    Test("Test Case 3", "dt3/point.txt", "ans/ans_dt3.txt")
+    Test("Test Case 1", point_dir + "dt1/point.txt", ans_dir + "ans_dt1.txt", "dt1/ans.txt"),
+    Test("Test Case 2", point_dir + "dt2/point.txt", ans_dir + "ans_dt2.txt", "dt2/ans.txt"),
+    Test("Test Case 3", point_dir + "dt3/point.txt", ans_dir + "ans_dt3.txt")
 };
 
 int main(){
