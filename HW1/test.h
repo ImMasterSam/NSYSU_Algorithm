@@ -77,6 +77,12 @@ bool Test::verifySol(const sol_t& sol, const double best_dis, bool output) const
 
     if(output){
         ofstream fout(outputPath);
+
+        if(!fout.is_open()){
+            cerr << "Error: Cannot open output file " << outputPath << endl;
+            exit(-1);
+        }
+        
         fout << "distance: " << best_dis << endl;
         for(int id : sol){
             fout << id << endl;
@@ -112,7 +118,7 @@ void Test::loadCities() {
     ifstream fin(filePath);
 
     if(!fin.is_open()){
-        cerr << "Error: Cannot open file " << filePath << endl;
+        cerr << "Error: Cannot open data file " << filePath << endl;
         exit(-1);
     }
 
