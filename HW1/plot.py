@@ -1,11 +1,23 @@
-from sys import argv
+import argparse
 from os import system
 import matplotlib.pyplot as plt
 
+# Arguments Parsing
+parser = argparse.ArgumentParser()
+parser.add_argument("-f", "--file",
+                    type=str,
+                    help="File name")
+parser.add_argument("-d", "--data",
+                    type=str,
+                    help="Point data file path")
+parser.add_argument("-n", "--name",
+                    type=str,
+                    help="The name of the test case")
+
 # Test cases
-Test = [("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "images/ans_dt1.png"),
-        ("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "images/ans_dt2.png"),
-        ("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt", "images/ans_dt3.png")]
+# Test = [("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "images/ans_dt1.png"),
+#         ("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "images/ans_dt2.png"),
+#         ("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt", "images/ans_dt3.png")]
 
 def read_points(point_path: str, ans_path: str) -> list[tuple[float, float]]:
     """
@@ -45,11 +57,9 @@ def plot_path(name: str, paths: list[tuple[float, float]], out_path: str):
 
 if __name__ == "__main__":
 
-    if len(argv) == 2 and argv[1] == "-r":
-        system("mingw32-make")
-        system("main")
-
-    for (name, point_path, ans_path, out_path) in Test:
+    args = parser.parse_args()
         
-        paths = read_points(point_path, ans_path)
-        plot_path(name, paths, out_path)
+    paths = read_points(args.data, f"ans/{args.file}.txt")
+    plot_path(args.name, paths, f"images/{args.file}.png")
+
+    print(f"[{args.name}] Plot saved to images/{args.file}.png")

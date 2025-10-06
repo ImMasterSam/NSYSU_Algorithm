@@ -30,8 +30,8 @@ public:
 
     const string name;
 
-    Test(const string& name, const string& filePath, const string& outputPath, const string& ansPath = "")
-    : name(name), filePath(filePath), outputPath(outputPath), ansPath(ansPath) {
+    Test(const string& name, const string& filePath, const string& outputFile, const string& ansPath = "")
+    : name(name), filePath(filePath), outputFile(outputFile), ansPath(ansPath) {
 
         loadCities();
         loadAns();
@@ -56,7 +56,7 @@ private:
     
     // files
     const string filePath;
-    const string outputPath;
+    const string outputFile;
     const string ansPath;
 
     // city data
@@ -76,13 +76,13 @@ private:
 bool Test::verifySol(const sol_t& sol, const double best_dis, bool output) const {
 
     if(output){
-        ofstream fout(outputPath);
+        ofstream fout("ans/" + outputFile + ".txt");
 
         if(!fout.is_open()){
-            cerr << "Error: Cannot open output file " << outputPath << endl;
+            cerr << "Error: Cannot open output file " << outputFile << endl;
             exit(-1);
         }
-        
+
         fout << "distance: " << best_dis << endl;
         for(int id : sol){
             fout << id << endl;

@@ -5,15 +5,15 @@ using namespace std;
 
 string test_name = "Custom Test";
 string data_path = "";
-string output_path = "";
+string output_filename = "";
 string ans_path = "";
 bool plot = false;
 
-Test tests[] = {
-    Test("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "data/dt1/ans.txt"),
-    Test("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "data/dt2/ans.txt"),
-    Test("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt")
-};
+// Test tests[] = {
+//     Test("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "data/dt1/ans.txt"),
+//     Test("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "data/dt2/ans.txt"),
+//     Test("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt")
+// };
 
 void handleArgs(int argc, char* argv[]){
     
@@ -42,7 +42,7 @@ void handleArgs(int argc, char* argv[]){
             case 'o':
                 index++;
                 if(index < argc && argv[index][0] != '-')
-                    output_path = argv[index];
+                    output_filename = argv[index];
                 else{
                     cerr << "Error: Missing argument for -o" << endl;
                     exit(-1);
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]){
 
     handleArgs(argc, argv);
 
-    Test test = Test(test_name, data_path, output_path, ans_path);
+    Test test = Test(test_name, data_path, output_filename, ans_path);
 
     cout << "===== " << test.name << " =====" << endl;
 
@@ -102,6 +102,11 @@ int main(int argc, char* argv[]){
 
     cout << "Best distance: " << best_dis << endl;
     test.verifySol(best_sol, best_dis, true);
+
+    if(plot){
+        string plot_cmd = "python plot.py -f " + output_filename + " -d " + data_path + " -n \"" + test_name + "\"";
+        system(plot_cmd.c_str());
+    }
 
     cout << endl;
 
