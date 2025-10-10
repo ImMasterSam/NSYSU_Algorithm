@@ -49,6 +49,7 @@ def plot_path(name: str, paths: list[tuple[float, float]], out_path: str):
     plt.title(name)
     plt.xlabel('X')
     plt.ylabel('Y')
+    plt.axis('equal')
     plt.scatter(*zip(*paths), color='navy', label='Cities', zorder=1)
     plt.plot(*zip(*paths, paths[0]), color='dodgerblue', linestyle='--', label='Path', zorder=0)
     plt.legend()
