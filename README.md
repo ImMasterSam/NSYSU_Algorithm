@@ -24,11 +24,11 @@
 
 ### plot
 ```sh
-~/HW?> plot [-f FILENAME] [-d DATA] [-n NAME]
+~/HW?> python plot.py [-f FILENAME] [-d DATA] [-n NAME]
 ```
 
 ### Execution Script
-直接測試 3 個給定的側資
+直接測試 3 個給定的測資
 ```sh
 ~/HW?> ./script.cmd
 ```

@@ -36,6 +36,7 @@ private:
     // iteration
     int iter = 0;
     int total_iter = 1;
+    int progress = 0;
 
     // processing
     void init();
@@ -69,9 +70,10 @@ void Exhaustive::solve(){
 
         // output current progress
         iter++;
-        int progress = ((double)iter / total_iter) * 100;
-        if(iter % 50000 == 0){
-            cout << "Progress: " << progress << "%" << "\r";
+        int current_progress = ((double)iter / total_iter) * 100;
+        if(current_progress != progress){
+            progress = current_progress;
+            cout << "Progress: " << progress << "%\r";
         }
 
     }while(next_permutation(curr_sol.begin(), curr_sol.end()));

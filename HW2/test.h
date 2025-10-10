@@ -1,13 +1,16 @@
 #pragma once
-using namespace std;
 
+#include <iostream>
 #include <fstream>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <unordered_map>
 
 using namespace std;
 using sol_t = vector<int>;          // {city1, city2, ...}
+
+const double EPS = 1e-3;
 
 // {x, y}
 struct pos_t{
@@ -62,6 +65,9 @@ private:
     // city data
     vector<int> city_ids;
     unordered_map<int, city_t> city_datas;
+
+    // answer
+    double ans_dis;
     sol_t ans;
 
     // loading functions
@@ -92,23 +98,32 @@ bool Test::verifySol(const sol_t& sol, const double best_dis, bool output) const
 
     if(!ans.empty()){
         
+        // Check solution size
         if(sol.size() != ans.size()){
-            cerr << "Solution size mismatch: expected " << ans.size() << ", got " << sol.size() << "." << endl;
+            cerr << "\033[91mSolution size mismatch: expected " << ans.size() << ", got " << sol.size() << ".\033[m" << endl;
             return false;
         }
-        for(size_t i = 0; i < sol.size(); i++){
-            if(sol[i] != ans[i]){
-                cout << "Wrong answer: city id mismatch at position " << i << "." << endl;
-                return false;
-            }
+        
+        // Check if the solution reach the optima
+        if(best_dis - ans_dis > EPS){
+            cout << "\033[91mUnable to reach minimum distance!\033[m" << endl;
+            cout << "Minimum distance: ";
+            cout << "\033[92m" << ans_dis << "\033[m, Your distance: \033[93m" << best_dis << "\033[m" << endl;
+            return false;
         }
-        cout << "Correct answer!" << endl;
-        return true;
+        else{
+            cout << "\033[92mReach minimum distance!\033[m" << endl;
+            return true;
+        }
+
 
     } else {
-        cout << "No answer file provided." << endl;
+        cout << "\033[90mNo answer file provided.\033[m" << endl;
         return false;
     }
+
+    cerr << "\033[91Unknown error in verifying solution.\033[m" << endl;
+    return false;
 
 }
 
@@ -151,6 +166,14 @@ void Test::loadAns() {
     // skip the first line (header)
     string header;
     getline(fin, header);
+
+    // Read the answer distance from the header
+    char* header_cstr = (char*) header.c_str();
+    char* token = strtok(header_cstr, " ");
+    token = strtok(NULL, " ");                      // Skip "distance:"
+    if(token != nullptr){
+        ans_dis = stod(string(token));
+    }
 
     while(fin >> city_id){
         ans.push_back(city_id);

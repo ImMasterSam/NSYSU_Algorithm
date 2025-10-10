@@ -1,4 +1,3 @@
-#include <iostream>
 #include "test.h"
 #include "exhaustive.h"
 using namespace std;
@@ -8,12 +7,6 @@ string data_path = "";
 string output_filename = "";
 string ans_path = "";
 bool plot = false;
-
-// Test tests[] = {
-//     Test("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "data/dt1/ans.txt"),
-//     Test("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "data/dt2/ans.txt"),
-//     Test("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt")
-// };
 
 void handleArgs(int argc, char* argv[]){
     

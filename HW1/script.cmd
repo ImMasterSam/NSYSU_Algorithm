@@ -1,7 +1,7 @@
 @echo off
 
-if not exist "main.exe" (
-    echo No main.exe found. Compiling...
+if exist "Makefile" (
+    echo Compiling main.cpp ...
     mingw32-make.exe
 )
 
