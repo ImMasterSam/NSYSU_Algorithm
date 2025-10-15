@@ -31,8 +31,6 @@ private:
     sol_t curr_sol;
     double curr_dis;
     vector<bool> visited;
-    int curr_city, next_city;
-    double min_city_dis, temp_dis;
 
     sol_t best_sol;
     double best_dis;
@@ -42,7 +40,8 @@ private:
 
     // processing
     void init();
-    inline double calcDis(pos_t a, pos_t b);
+    void startPoint(const int& start_id);
+    inline double calcDis(const pos_t& a, const pos_t& b) const;
 
 };
 
@@ -60,17 +59,61 @@ void Greedy::solve(){
 
     init();
 
-    for(int iter=1; iter<total_iter; iter++){
+    for(int iter=0; iter<total_iter; iter++){
+
+        startPoint(city_ids[iter]);
+
+        // Update best solution
+        if(curr_dis < best_dis){
+            best_sol = curr_sol;
+            best_dis = curr_dis;
+        }
+
+        // output current progress
+        cout << "Progress: " << iter << " / " << total_iter << "\r";
+
+    }
+
+}
+
+void Greedy::init(){
+
+    curr_sol.clear();
+    visited.assign(city_ids.size() + 1, false);
+
+    curr_dis = 0.0;
+
+    best_sol.clear();
+    best_dis = 1e9;
+
+    total_iter = city_ids.size();
+
+}
+
+void Greedy::startPoint(const int& start_id){
+
+    curr_sol.clear();
+    curr_sol.push_back(start_id);
+
+    visited.assign(city_ids.size() + 1, false);
+    visited[start_id] = true;
+
+    int curr_city = start_id;
+    int next_city = -1;
+    double min_city_dis = 1e9, temp_dis = 1e9;
+
+    curr_dis = 0.0;
+
+    for(int city=1; city<city_ids.size(); city++){
 
         next_city = -1;
         min_city_dis = 1e9;
 
         for(int id : city_ids){
 
-            temp_dis = 1e9;
-            if(!visited[id]){
-                temp_dis = calcDis(city_pos[curr_city], city_pos[id]);
-            }
+            if(visited[id]) continue;
+            
+            temp_dis = calcDis(city_pos[curr_city], city_pos[id]);
 
             if(temp_dis < min_city_dis){
                 min_city_dis = temp_dis;
@@ -86,40 +129,14 @@ void Greedy::solve(){
         curr_city = next_city;
         curr_sol.push_back(curr_city);
 
-        // output current progress
-        cout << "Progress: " << iter << " / " << total_iter << "\r";
-
     }
 
     // Complete the tour by returning to the starting city
     curr_dis += calcDis(city_pos[curr_city], city_pos[curr_sol[0]]);
 
-    // Update best solution
-    best_sol = curr_sol;
-    best_dis = curr_dis;
-
 }
 
-void Greedy::init(){
-
-    curr_sol.clear();
-    curr_sol.push_back(city_ids[0]);
-    visited.assign(city_ids.size() + 1, false);
-
-    curr_city = city_ids[0];
-    visited[curr_city] = true;
-
-    next_city = -1;
-    curr_dis = 0.0;
-
-    best_sol.clear();
-    best_dis = 1e9;
-
-    total_iter = city_ids.size();
-
-}
-
-inline double Greedy::calcDis(pos_t a, pos_t b) { 
+inline double Greedy::calcDis(const pos_t& a, const pos_t& b) const { 
 
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); 
 
