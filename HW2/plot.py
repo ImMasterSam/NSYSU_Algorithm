@@ -14,10 +14,6 @@ parser.add_argument("-n", "--name",
                     type=str,
                     help="The name of the test case")
 
-# Test cases
-# Test = [("Test Case 1", "data/dt1/point.txt", "ans/ans_dt1.txt", "images/ans_dt1.png"),
-#         ("Test Case 2", "data/dt2/point.txt", "ans/ans_dt2.txt", "images/ans_dt2.png"),
-#         ("Test Case 3", "data/dt3/point.txt", "ans/ans_dt3.txt", "images/ans_dt3.png")]
 
 def read_points(point_path: str, ans_path: str) -> list[tuple[float, float]]:
     """
