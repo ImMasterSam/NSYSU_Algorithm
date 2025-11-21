@@ -6,10 +6,11 @@
 ## 作業清單
 | 作業 | 演算法 |
 |:---:|:---:|
-| HW1 | 暴力法 Exhaustive |
-| HW2 | 貪心法 Greedy |
-| HW3 | ... |
-| HW4 | ... |
+|  HW1  | 暴力法 Exhaustive |
+|  HW2  | 貪心法 Greedy |
+|  HW3  | 動態規劃 Dynamic Programming |
+|  HW4  | 蟻群演算法 Ant Colony Optimization |
+| Bonus | Elastic Net |
 
 ## 執行程式
 
