@@ -1,5 +1,5 @@
 #include "test.h"
-#include "greedy.h"
+#include "dynamic.h"
 using namespace std;
 
 string test_name = "Custom Test";
