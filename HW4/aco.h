@@ -9,11 +9,11 @@ using namespace std;
 
 /* ---- Definition ---- */
 
-class DynamicProgramming{
+class AntColonyOptimization{
 
 public:
 
-    DynamicProgramming(Test& test);
+    AntColonyOptimization(Test& test);
 
     void solve();
 
@@ -56,14 +56,14 @@ private:
 
 /* ---- Implementation ---- */
 
-DynamicProgramming::DynamicProgramming(Test& test): test(test){
+AntColonyOptimization::AntColonyOptimization(Test& test): test(test){
 
     city_ids = test.getCityIds();
     city_pos = test.getCityPosVec();
 
 }
 
-void DynamicProgramming::solve(){
+void AntColonyOptimization::solve(){
 
     init();
 
@@ -134,7 +134,7 @@ void DynamicProgramming::solve(){
 
 }
 
-void DynamicProgramming::init(){
+void AntColonyOptimization::init(){
 
     best_sol.clear();
     best_dis = 1e9;
@@ -150,7 +150,7 @@ void DynamicProgramming::init(){
 
 }
 
-sol_t DynamicProgramming::reconstructSol(int state, int last_id) const {
+sol_t AntColonyOptimization::reconstructSol(int state, int last_id) const {
 
     sol_t sol;
     sol.push_back(city_ids[last_id]);
@@ -172,7 +172,7 @@ sol_t DynamicProgramming::reconstructSol(int state, int last_id) const {
 
 }
 
-inline double DynamicProgramming::calcDis(const pos_t& a, const pos_t& b) const { 
+inline double AntColonyOptimization::calcDis(const pos_t& a, const pos_t& b) const { 
 
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); 
 

@@ -1,5 +1,5 @@
 #include "test.h"
-#include "dynamic.h"
+#include "aco.h"
 using namespace std;
 
 string test_name = "Custom Test";
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
         cout << "\033[93mWarning: Number of cities is large; computation may take significant time.\033[m" << endl;
     }
 
-    DynamicProgramming solver(test);
+    AntColonyOptimization solver(test);
     solver.solve();
     sol_t best_sol = solver.getBestSol();
     double best_dis = solver.getBestDis();
