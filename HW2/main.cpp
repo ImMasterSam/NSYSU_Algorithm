@@ -88,7 +88,7 @@ int main(int argc, char* argv[]){
 
     cout << "Number of cities: " << city_ids.size() << endl;
 
-    DynamicProgramming solver(test);
+    Greedy solver(test);
     solver.solve();
     sol_t best_sol = solver.getBestSol();
     double best_dis = solver.getBestDis();

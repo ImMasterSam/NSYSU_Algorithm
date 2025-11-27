@@ -8,11 +8,11 @@ using namespace std;
 
 /* ---- Definition ---- */
 
-class DynamicProgramming{
+class Greedy{
 
 public:
 
-    DynamicProgramming(Test& test);
+    Greedy(Test& test);
 
     void solve();
 
@@ -48,14 +48,14 @@ private:
 
 /* ---- Implementation ---- */
 
-DynamicProgramming::DynamicProgramming(Test& test): test(test){
+Greedy::Greedy(Test& test): test(test){
 
     city_ids = test.getCityIds();
     city_pos = test.getCityPosVec();
 
 }
 
-void DynamicProgramming::solve(){
+void Greedy::solve(){
 
     init();
 
@@ -76,7 +76,7 @@ void DynamicProgramming::solve(){
 
 }
 
-void DynamicProgramming::init(){
+void Greedy::init(){
 
     curr_sol.clear();
     visited.assign(city_ids.size() + 1, false);
@@ -90,7 +90,7 @@ void DynamicProgramming::init(){
 
 }
 
-void DynamicProgramming::startPoint(const int& start_id){
+void Greedy::startPoint(const int& start_id){
 
     curr_sol.clear();
     curr_sol.push_back(start_id);
@@ -136,7 +136,7 @@ void DynamicProgramming::startPoint(const int& start_id){
 
 }
 
-inline double DynamicProgramming::calcDis(const pos_t& a, const pos_t& b) const { 
+inline double Greedy::calcDis(const pos_t& a, const pos_t& b) const { 
 
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); 
 
