@@ -55,8 +55,14 @@ def plot_path(name: str, paths: list[tuple[float, float]], out_path: str):
 if __name__ == "__main__":
 
     args = parser.parse_args()
+    print(f"[{args.name}] Plotting...", end='\r')
         
     paths = read_points(args.data, f"ans/{args.file}.txt")
+
+    if len(paths) == 0:
+        print(f"[{args.name}] No paths found in ans/{args.file}.txt")
+        exit(-1)
+    
     plot_path(args.name, paths, f"images/{args.file}.png")
 
     print(f"[{args.name}] Plot saved to images/{args.file}.png")

@@ -105,7 +105,13 @@ bool Test::verifySol(const sol_t& sol, const double best_dis, bool output) const
         }
         
         // Check if the solution reach the optima
-        if(best_dis - ans_dis > EPS){
+        if(best_dis < ans_dis){
+            cout << "\033[91mERROR: distance shorter than answer!\033[m" << endl;
+            cout << "Minimum distance: ";
+            cout << "\033[92m" << ans_dis << "\033[m, Your distance: \033[93m" << best_dis << "\033[m" << endl;
+            return false;
+        }
+        else if(best_dis - ans_dis > EPS){
             cout << "\033[91mUnable to reach minimum distance!\033[m" << endl;
             cout << "Minimum distance: ";
             cout << "\033[92m" << ans_dis << "\033[m, Your distance: \033[93m" << best_dis << "\033[m" << endl;

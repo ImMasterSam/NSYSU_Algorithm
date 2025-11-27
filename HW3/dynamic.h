@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <bitset>
 #include <algorithm>
 #include <cmath>
 #include "test.h"
@@ -30,10 +31,14 @@ private:
     // solutions
     sol_t curr_sol;
     double curr_dis;
-    vector<bool> visited;
 
     sol_t best_sol;
     double best_dis;
+
+    // variables
+    const double INF = 1e9;
+    vector<int> bits__id;
+    vector<vector<double>> dp_table; 
 
     // iteration
     int total_iter = 0;
@@ -59,32 +64,21 @@ void DynamicProgramming::solve(){
 
     init();
 
-    for(int iter=0; iter<total_iter; iter++){
-
-        startPoint(city_ids[iter]);
-
-        // Update best solution
-        if(curr_dis < best_dis){
-            best_sol = curr_sol;
-            best_dis = curr_dis;
-        }
-
-        // output current progress
-        cout << "Progress: " << iter << " / " << total_iter << "\r";
-
-    }
+    startPoint(0);
+    best_sol = curr_sol;
+    best_dis = curr_dis;
 
 }
 
 void DynamicProgramming::init(){
 
     curr_sol.clear();
-    visited.assign(city_ids.size() + 1, false);
-
     curr_dis = 0.0;
 
     best_sol.clear();
     best_dis = 1e9;
+
+    bits__id.resize(city_ids.size() - 1);
 
     total_iter = city_ids.size();
 
@@ -92,47 +86,63 @@ void DynamicProgramming::init(){
 
 void DynamicProgramming::startPoint(const int& start_id){
 
-    curr_sol.clear();
-    curr_sol.push_back(start_id);
+    // initialize bits_id
+    for(int i=0, j=0; i<city_ids.size(); i++){
 
-    visited.assign(city_ids.size() + 1, false);
-    visited[start_id] = true;
+        if(i == start_id)
+            continue;
+        
+        bits__id[j++] = i;
 
-    int curr_city = start_id;
-    int next_city = -1;
-    double min_city_dis = 1e9, temp_dis = 1e9;
+    }
 
-    curr_dis = 0.0;
+    // Variables
+    int start_city = city_ids[start_id];
+    int total_states = (1 << bits__id.size());
+    dp_table.assign(total_states, vector<double>(city_ids.size(), INF));
 
-    for(int city=1; city<city_ids.size(); city++){
+    // First state initialization
+    for(int visit=0; visit<city_ids.size(); visit++){
 
-        next_city = -1;
-        min_city_dis = 1e9;
+        int visit_city = city_ids[visit];
+        dp_table[0][visit] = calcDis(city_pos[start_city], city_pos[visit_city]);
 
-        for(int id : city_ids){
+    }
 
-            if(visited[id]) continue;
-            
-            temp_dis = calcDis(city_pos[curr_city], city_pos[id]);
+    int visit_city, last_city, last_id, prev_state;
+    double dis;
 
-            if(temp_dis < min_city_dis){
-                min_city_dis = temp_dis;
-                next_city = id;
+    // DP state transition using bottom method
+    for(int state=1; state<total_states; state++){
+
+        for(int visit=0; visit<city_ids.size(); visit++){
+
+            for(int b=0; b<bits__id.size(); b++){
+
+                if((state & (1 << b))){
+
+                    // Get city ids
+                    visit_city = city_ids[visit];
+                    last_id = bits__id[b];
+                    last_city = city_ids[last_id];
+                    
+                    // Update dp table from previous state
+                    prev_state = (state ^ (1 << b));
+                    dis = calcDis(city_pos[last_city], city_pos[visit_city]);
+                    dp_table[state][visit] = min(dp_table[state][visit], dp_table[prev_state][last_id] + dis);
+
+                }
+
             }
 
         }
 
-        // Update current solution
-        visited[next_city] = true;
-        curr_dis += min_city_dis;
-
-        curr_city = next_city;
-        curr_sol.push_back(curr_city);
+        cout << "Progress: " << state << " / " << total_states << "\r";
 
     }
 
-    // Complete the tour by returning to the starting city
-    curr_dis += calcDis(city_pos[curr_city], city_pos[curr_sol[0]]);
+    curr_sol = city_ids;
+    curr_dis = dp_table[total_states-1][start_id];
 
 }
 
