@@ -29,23 +29,25 @@ private:
     vector<pos_t> city_pos;
 
     // solutions
-    sol_t curr_sol;
-    double curr_dis;
-
     sol_t best_sol;
     double best_dis;
 
     // variables
     const double INF = 1e9;
+    const int start_id = 0;      // default starting from city_ids[0]
+
+    int start_city, total_states;
+
     vector<int> bits__id;
     vector<vector<double>> dp_table; 
+    vector<vector<pair<int, int>>> prev_table;
 
     // iteration
     int total_iter = 0;
 
     // processing
     void init();
-    void startPoint(const int& start_id);
+    sol_t reconstructSol(int state, int last_id) const;
     inline double calcDis(const pos_t& a, const pos_t& b) const;
 
 };
@@ -64,28 +66,6 @@ void DynamicProgramming::solve(){
 
     init();
 
-    startPoint(0);
-    best_sol = curr_sol;
-    best_dis = curr_dis;
-
-}
-
-void DynamicProgramming::init(){
-
-    curr_sol.clear();
-    curr_dis = 0.0;
-
-    best_sol.clear();
-    best_dis = 1e9;
-
-    bits__id.resize(city_ids.size() - 1);
-
-    total_iter = city_ids.size();
-
-}
-
-void DynamicProgramming::startPoint(const int& start_id){
-
     // initialize bits_id
     for(int i=0, j=0; i<city_ids.size(); i++){
 
@@ -97,20 +77,16 @@ void DynamicProgramming::startPoint(const int& start_id){
     }
 
     // Variables
-    int start_city = city_ids[start_id];
-    int total_states = (1 << bits__id.size());
-    dp_table.assign(total_states, vector<double>(city_ids.size(), INF));
+    int visit_city, last_city, last_id, prev_state;
+    double dis, temp_dis;
 
     // First state initialization
     for(int visit=0; visit<city_ids.size(); visit++){
 
-        int visit_city = city_ids[visit];
+        visit_city = city_ids[visit];
         dp_table[0][visit] = calcDis(city_pos[start_city], city_pos[visit_city]);
 
     }
-
-    int visit_city, last_city, last_id, prev_state;
-    double dis;
 
     // DP state transition using bottom method
     for(int state=1; state<total_states; state++){
@@ -129,7 +105,14 @@ void DynamicProgramming::startPoint(const int& start_id){
                     // Update dp table from previous state
                     prev_state = (state ^ (1 << b));
                     dis = calcDis(city_pos[last_city], city_pos[visit_city]);
-                    dp_table[state][visit] = min(dp_table[state][visit], dp_table[prev_state][last_id] + dis);
+                    temp_dis = dp_table[prev_state][last_id] + dis;
+
+                    if(temp_dis < dp_table[state][visit]){
+
+                        dp_table[state][visit] = temp_dis;
+                        prev_table[state][visit] = {prev_state, last_id};
+
+                    }
 
                 }
 
@@ -141,8 +124,46 @@ void DynamicProgramming::startPoint(const int& start_id){
 
     }
 
-    curr_sol = city_ids;
-    curr_dis = dp_table[total_states-1][start_id];
+    best_sol = reconstructSol(total_states-1, start_id);
+    best_dis = dp_table[total_states-1][start_id];
+
+}
+
+void DynamicProgramming::init(){
+
+    best_sol.clear();
+    best_dis = 1e9;
+
+    bits__id.resize(city_ids.size() - 1);
+    
+    start_city = city_ids[start_id];
+    total_states = (1 << bits__id.size());
+    dp_table.assign(total_states, vector<double>(city_ids.size(), INF));
+    prev_table.assign(total_states, vector<pair<int, int>>(city_ids.size(), {-1, -1}));
+
+    total_iter = city_ids.size();
+
+}
+
+sol_t DynamicProgramming::reconstructSol(int state, int last_id) const {
+
+    sol_t sol;
+    sol.push_back(city_ids[last_id]);
+
+    int prev_state, prev_id;
+
+    while(state != 0){
+
+        prev_state = prev_table[state][last_id].first;
+        prev_id = prev_table[state][last_id].second;
+
+        sol.push_back(city_ids[prev_id]);
+        state = prev_state;
+        last_id = prev_id;
+
+    }
+
+    return sol;
 
 }
 
